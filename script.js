@@ -189,3 +189,193 @@ promptBtn.addEventListener("click", () => {
 
 promptForm.addEventListener("submit", handleFormSubmit);
 themeToggle.addEventListener("click", toggleTheme);
+
+document.addEventListener('DOMContentLoaded', function() {
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  
+  // Set canvas to full screen
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  // Particle class
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    
+    reset() {
+      // Random position
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      
+      // Random size (smaller particles are more common)
+      const sizeRandom = Math.random();
+      this.size = sizeRandom < 0.8 ? 
+                  Math.random() * 1 + 0.1 : // 80% small (0.1-1.1)
+                  Math.random() * 2 + 1;    // 20% larger (1-3)
+      
+      // Random opacity
+      this.opacity = Math.random() * 0.6 + 0.1;
+      
+      // Random movement speed and direction
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      
+      // Flickering effect
+      this.flickerSpeed = Math.random() * 0.03;
+      this.flickerDirection = Math.random() > 0.5 ? 1 : -1;
+      
+      // Color with a hint of blue for most stars
+      const colorRandom = Math.random();
+      if (colorRandom < 0.7) {
+        // 70% white with hint of blue
+        this.color = `rgba(220, 230, 255, ${this.opacity})`;
+      } else if (colorRandom < 0.85) {
+        // 15% light blue
+        this.color = `rgba(135, 206, 250, ${this.opacity})`;
+      } else if (colorRandom < 0.95) {
+        // 10% cyan
+        this.color = `rgba(0, 229, 255, ${this.opacity})`;
+      } else {
+        // 5% light purple
+        this.color = `rgba(138, 111, 255, ${this.opacity})`;
+      }
+    }
+    
+    update() {
+      // Move particle
+      this.x += this.speedX;
+      this.y += this.speedY;
+      
+      // Flicker opacity
+      this.opacity += this.flickerSpeed * this.flickerDirection;
+      if (this.opacity > 0.7 || this.opacity < 0.1) {
+        this.flickerDirection *= -1;
+      }
+      
+      // Update color with new opacity
+      const colorBase = this.color.substring(0, this.color.lastIndexOf(',') + 1);
+      this.color = `${colorBase} ${this.opacity})`;
+      
+      // Reset if out of bounds
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+        this.reset();
+      }
+    }
+    
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+      
+      // Add glow effect for larger particles
+      if (this.size > 1) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(
+          this.x, this.y, 0, 
+          this.x, this.y, this.size * 2
+        );
+        gradient.addColorStop(0, this.color);
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+    }
+  }
+  
+  // Create particles
+  const particles = [];
+  const particleCount = Math.min(window.innerWidth * window.innerHeight / 5000, 300);
+  
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+  
+  // Animation loop
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Update and draw particles
+    particles.forEach(particle => {
+      particle.update();
+      particle.draw();
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+  
+  // Add occasional shooting stars
+  function createShootingStar() {
+    const star = {
+      x: Math.random() * canvas.width,
+      y: 0,
+      length: Math.random() * 80 + 30,
+      speed: Math.random() * 10 + 5,
+      angle: Math.PI / 4 + (Math.random() * Math.PI / 8),
+      opacity: 1
+    };
+    
+    function drawShootingStar() {
+      if (star.opacity <= 0) return;
+      
+      const endX = star.x + Math.cos(star.angle) * star.length;
+      const endY = star.y + Math.sin(star.angle) * star.length;
+      
+      ctx.beginPath();
+      ctx.moveTo(star.x, star.y);
+      ctx.lineTo(endX, endY);
+      
+      const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
+      gradient.addColorStop(0, `rgba(255, 255, 255, ${star.opacity})`);
+      gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      
+      // Update position
+      star.x += Math.cos(star.angle) * star.speed;
+      star.y += Math.sin(star.angle) * star.speed;
+      
+      // Fade out
+      star.opacity -= 0.01;
+      
+      if (star.opacity > 0) {
+        requestAnimationFrame(drawShootingStar);
+      }
+    }
+    
+    drawShootingStar();
+    
+    // Schedule next shooting star
+    const nextTimeout = Math.random() * 5000 + 2000; // Between 2-7 seconds
+    setTimeout(createShootingStar, nextTimeout);
+  }
+  
+  // Start shooting stars after a delay
+  setTimeout(createShootingStar, 2000);
+  
+  // Handle theme toggle
+  const themeToggle = document.querySelector('.theme-toggle');
+  themeToggle.addEventListener('click', function() {
+    document.body.classList.toggle('light-mode');
+    const icon = themeToggle.querySelector('i');
+    if (document.body.classList.contains('light-mode')) {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    } else {
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    }
+  });
+});

@@ -39,16 +39,10 @@ build/
 .env.production.local
 
 # Generated images (optional, uncomment if you want to exclude generated images)
+# generated-images/
 # *.png
 # *.jpg
 # *.jpeg
-
-# Ignore files with potential secrets
-*.env
-*.env.local
-*.env.development.local
-*.env.test.local
-*.env.production.local
 
 # Ignore local storage files that might contain API keys
 localStorage/
@@ -56,6 +50,5 @@ localStorage/
 # Ignore build output
 out/
 
-# Ignore OS specific files
-.DS_Store
-Thumbs.db 
+# API keys or configuration files
+config.js

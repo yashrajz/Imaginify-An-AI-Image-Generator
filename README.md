@@ -1,19 +1,18 @@
-# Magic Wand AI Image Generator
-
-Magic Wand AI Image Generator
+# Imaginify | AI Image Generator
 
 A beautiful, responsive web application that generates AI images using various models from Hugging Face. Built with vanilla JavaScript, HTML, and CSS.
 
 ## 🌟 Features
 
-- **Multiple AI Models**: Choose from various AI image generation models including FLUX, Stable Diffusion XL, and Openjourney
-- **Customizable Output**: Select the number of images to generate and aspect ratio (square, landscape, portrait)
+- **Multiple AI Models**: Choose from various AI image generation models including FLUX.1-dev, FLUX.1-schnell, Stable Diffusion XL, Stable Diffusion v1.5, and Openjourney
+- **Customizable Output**: Select the number of images to generate (1-4) and aspect ratio (square 1:1, landscape 16:9, portrait 9:16)
 - **Dark/Light Theme**: Toggle between dark and light themes with a single click
 - **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
 - **Random Prompt Generator**: Get inspiration with the random prompt generator
 - **Image Download**: Easily download generated images with a single click
 - **Loading States**: Visual feedback during image generation
 - **Error Handling**: Graceful error handling with user-friendly messages
+- **Beautiful UI**: Animated background with particles and stars for an immersive experience
 
 ## 🚀 Technologies Used
 
@@ -33,12 +32,12 @@ A beautiful, responsive web application that generates AI images using various m
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/magic-wand-ai-image-generator.git
+   git clone https://github.com/yourusername/imaginify-ai-image-generator.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd magic-wand-ai-image-generator
+   cd imaginify-ai-image-generator
    ```
 
 3. Open `index.html` in your browser or use a local server:
@@ -74,13 +73,10 @@ To use your own Hugging Face API key:
 ## 📸 Screenshots
 
 ### Light Theme
-![Light Theme] <img src = "light.png">
+![Light Theme](light.png)
 
 ### Dark Theme
-![Dark Theme]<img src = "dark.png">
-
-### Generated Images
-![Generated Images](https://i.imgur.com/placeholder.png)
+![Dark Theme](dark.png)
 
 ## 🤝 Contributing
 
@@ -100,5 +96,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Hugging Face](https://huggingface.co) for providing the AI models
 - [Font Awesome](https://fontawesome.com) for the icons
-- [Google Fonts](https://fonts.google.com) for the typography
+- [Google Fonts](https://fonts.google.com) for the typography (Outfit and DM Sans)
+- [Particles.js](https://github.com/VincentGarreau/particles.js/) for the animated background effects
 
